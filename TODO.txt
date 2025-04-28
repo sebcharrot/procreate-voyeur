@@ -1,9 +1,0 @@
-- Make it a singleton
-- Add file previews
-- Add About details
-- Remove some of the menus
-- Allow scroll-to-zoom (or click to zoom?) on images
-- Put on Github
-- Hook up pipeline for building and hosting builds on Github
-- Navigate to next and previous files
-- Gallery (view the whole folder)
