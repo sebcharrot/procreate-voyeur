@@ -96,6 +96,3 @@ dist/
 
 # VS Code
 .vscode/
-
-# Package lock files
-package-lock.json
