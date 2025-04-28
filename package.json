@@ -41,6 +41,7 @@
       "perMachine": false,
       "allowToChangeInstallationDirectory": true
     },
+    "publish": null,
     "files": [
       "preload.js",
       "src/index.js",
