@@ -1,5 +1,5 @@
 {
-  "name": "Voyeur",
+  "name": "@sebcharrot/voyeur",
   "productName": "Voyeur Procreate Viewer",
   "version": "1.0.0",
   "description": "A Windows viewer for Procreate files",
@@ -8,7 +8,7 @@
     "start": "npx electron .",
     "build": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win",
     "clean": "rimraf out dist",
-    "lint": "echo \"No linting configured\""
+    "release": "npm version patch && git push && git push --tags"
   },
   "keywords": [],
   "author": "Seb Charrot",
