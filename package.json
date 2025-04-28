@@ -1,7 +1,7 @@
 {
   "name": "@sebcharrot/voyeur",
   "productName": "Voyeur Procreate Viewer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A Windows viewer for Procreate files",
   "main": "src/index.js",
   "scripts": {
