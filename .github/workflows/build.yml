@@ -58,4 +58,4 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/**/*.exe
+          files: dist/*Setup*.exe
