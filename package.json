@@ -1,0 +1,66 @@
+{
+  "name": "Voyeur",
+  "productName": "Voyeur Procreate Viewer",
+  "version": "1.0.0",
+  "description": "A Windows viewer for Procreate files",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "npx electron .",
+    "build": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win",
+    "clean": "rimraf out dist",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": "Seb Charrot",
+  "license": "MIT",
+  "dependencies": {
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "@electron/fuses": "^1.8.0",
+    "electron": "^35.2.0",
+    "electron-builder": "^26.0.12",
+    "rimraf": "^6.0.1"
+  },
+  "build": {
+    "appId": "com.sebcharrot.voyeur",
+    "productName": "Voyeur Procreate Viewer",
+    "win": {
+      "target": "nsis",
+      "icon": "favicon.ico"
+    },
+    "mac": {
+      "target": [],
+      "identity": null
+    },
+    "linux": {
+      "target": []
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "preload.js",
+      "src/index.js",
+      "src/index.html",
+      "src/renderer.js",
+      "src/index.css",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/default.procreate",
+        "to": "default.procreate"
+      }
+    ],
+    "fileAssociations": [
+      {
+        "ext": "procreate",
+        "name": "Procreate File",
+        "role": "Viewer"
+      }
+    ]
+  }
+}
