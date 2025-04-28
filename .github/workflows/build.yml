@@ -6,6 +6,9 @@ on:
       - 'v*'  # Trigger when pushing tags like v1.0.0
   workflow_dispatch:  # Allow manual trigger too
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -19,6 +22,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: Cache Node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci
 
@@ -30,6 +41,7 @@ jobs:
         with:
           name: packaged-app
           path: dist/
+          retention-days: 7
 
   release:
     needs: build
@@ -41,6 +53,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: packaged-app
+          path: dist/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
