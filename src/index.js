@@ -5,41 +5,54 @@ let mainWindow;
 let openedFilePath = 'No file opened';
 let isDev;
 
-// Handle request for file path
-ipcMain.handle('get-opened-file', () => {
-  return openedFilePath;
-});
+const gotTheLock = app.requestSingleInstanceLock();
 
-// Main flow -- wait for ready then create the window
-app.whenReady().then(() => {
-  const filePath = process.argv.find(arg => arg.endsWith('.procreate'));
-  
-  if (filePath) {
-    openedFilePath = filePath;
-  } else {
-    openedFilePath = getDefaultProcreatePath();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
+
+  // Handle request for file path
+  ipcMain.handle('get-opened-file', () => {
+    return openedFilePath;
+  });
+
+  // Main flow -- wait for ready then create the window
+  app.whenReady().then(() => {
+    const filePath = process.argv.find(arg => arg.endsWith('.procreate'));
+    
+    if (filePath) {
+      openedFilePath = filePath;
+    } else {
+      openedFilePath = getDefaultProcreatePath();
+    }
+
+    // Hardcode if we're in dev mode
+    if (openedFilePath === 'No file opened') {
+      openedFilePath = getDefaultProcreatePath();
+      console.log('[DEV] Using hardcoded .procreate file:', openedFilePath);
+    }
+
+    createWindow();
+  });
+
+  function getDefaultProcreatePath() {
+    const isDev = !app.isPackaged;
+    return isDev
+      ? path.join(__dirname, '../assets/default.procreate') // adjust for dev path
+      : path.join(process.resourcesPath, 'default.procreate'); // for production
   }
 
-  // Hardcode if we're in dev mode
-  if (openedFilePath === 'No file opened') {
-    openedFilePath = getDefaultProcreatePath();
-    console.log('[DEV] Using hardcoded .procreate file:', openedFilePath);
-  }
-
-  createWindow();
-});
-
-function getDefaultProcreatePath() {
-  const isDev = !app.isPackaged;
-  return isDev
-    ? path.join(__dirname, '../assets/default.procreate') // adjust for dev path
-    : path.join(process.resourcesPath, 'default.procreate'); // for production
-}
-
-// Create the main window
-const createWindow = () => {
-  mainWindow = new BrowserWindow({
-    show: false,
+  // Create the main window
+  const createWindow = () => {
+    mainWindow = new BrowserWindow({
+      show: false,
     icon: path.join(__dirname, '..', 'favicon.ico'),
     webPreferences: {
       preload: path.join(__dirname, '..', 'preload.js'), // if preload.js is at root
@@ -70,5 +83,6 @@ const createWindow = () => {
       console.log('[MAIN] No .procreate file to load yet.');
     }
   });
-};
+  };
+}
 
